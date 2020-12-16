@@ -65,6 +65,9 @@ const (
 	// CIIntegrationEKS contains the constants to be used when running tests on EKS.
 	CIIntegrationEKS = "eks"
 
+	// CIIntegrationEKSENI contains the constants to be used when running tests on EKS in ENI mode.
+	CIIntegrationEKSENI = "eks-eni"
+
 	// CIIntegrationGKE contains the constants to be used when running tests on GKE.
 	CIIntegrationGKE = "gke"
 
@@ -136,6 +139,16 @@ var (
 		"nodeinit.enabled":       "true",
 	}
 
+	eksENIHelmOverrides = map[string]string{
+		"egressMasqueradeInterfaces": "eth0",
+		"eni":                        "true",
+		"ipam.mode":                  "eni",
+		"ipv6.enabled":               "false",
+		"k8s.requireIPv4PodCIDR":     "false",
+		"nodeinit.enabled":           "true",
+		"tunnel":                     "disabled",
+	}
+
 	gkeHelmOverrides = map[string]string{
 		"ipv6.enabled":                "false",
 		"nodeinit.enabled":            "true",
@@ -178,6 +191,7 @@ var (
 	helmOverrides = map[string]map[string]string{
 		CIIntegrationFlannel:  flannelHelmOverrides,
 		CIIntegrationEKS:      eksHelmOverrides,
+		CIIntegrationEKSENI:   eksENIHelmOverrides,
 		CIIntegrationGKE:      gkeHelmOverrides,
 		CIIntegrationKind:     kindHelmOverrides,
 		CIIntegrationMicrok8s: microk8sHelmOverrides,
